@@ -14,6 +14,7 @@ int fact(int N)
 }
 
 /*---Изменения для второго комита---*/
+//jfjircwnbcjer
 
 int main() {
     int N;
