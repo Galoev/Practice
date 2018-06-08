@@ -5,60 +5,91 @@
 
 using namespace std;
 
-void Insert(float *mas, const unsigned int from, const unsigned int to){
-    float tmp = mas[from];
-    if (from == to ) return;
-    if (from > to)
-        for (size_t i = from; i>to; i--)
-            mas[i] = mas[i-1];
+void Insert(float *pMas, const unsigned int aFrom, const unsigned int aTo){
+    float tmp = pMas[aFrom];
+    if (aFrom == aTo ) return;
+    if (aFrom > aTo)
+        for (int i = aFrom; i>aTo; i--)
+            pMas[i] = pMas[i-1];
     else
-        for (size_t i = from; i<to; i++)
-            mas[i] = mas[i+1];
-    mas[to]=tmp;
+        for (int i = aFrom; i<aTo; i++)
+            pMas[i] = pMas[i+1];
+    pMas[aTo]=tmp;
 }
 
-void TransformMtrxFirstAlg(float *mtrx, const int n, const int m){
+void TransformMtrxFirstAlg(float *pMtrx, const int nRow, const int nCol){
     int place = 1;
-    int start = m;
-    int end = m;
+    int start = nCol;
+    int end = nCol;
     
-    for (int i(0); i < m; i++){
-        for (int j = start; j < (n * m -1); j += end){
-            Insert(mtrx, j, place);
+    for (int i = 0; i < nCol; i++){
+        for (int j = start; j < (nRow * nCol -1); j += end){
+            Insert(pMtrx, j, place);
             place++;
         }
-        start += (n-1);
+        start += (nRow-1);
         place++;
         end--;
     }
 }
 
-void TransformMtrxSecondAlg(float *mtrx, const int n, const int m){
-    for (int i = 1; i < n ; i++){
-        for (int j = 0; j < m ; j++){
-            Insert(mtrx, i * m + j, j * (i + 1) + i);
+void TransformMtrxSecondAlg(float *pMtrx, const int nRow, const int nCol){
+    for (int i = 1; i < nRow ; i++){
+        for (int j = 0; j < nCol ; j++){
+            Insert(pMtrx, i * nCol + j, j * (i + 1) + i);
         }
     }
 }
 
-void TransformMtrxThirdAlg(float *mtrx,unsigned int n,unsigned int m)
+void TransformMtrxThirdAlg(float *pMtrx,unsigned int nRow,unsigned int nCol)
 {
-    while(m>1)
+    while(nCol>1)
     {
-        for(unsigned int i=0;i<n;i++)
-        {
-            unsigned int index=m-1+m*(n-1-i);
-            unsigned int target=m*n-1-i;
-            Insert(mtrx, index, target);
+        for(unsigned int i=0;i<nRow;i++) {
+            unsigned int index=nCol-1+nCol*(nRow-1-i);
+            unsigned int target=nCol*nRow-1-i;
+            Insert(pMtrx, index, target);
         }
-        --m;
+        --nCol;
     }
 }
+
+void TransformMtrxFourthdAlg(float *pMtrx, int nRow, int nCol)
+{
+    int size = nRow*nCol - 1;
+    float t;
+    int next;
+    int cycleBegin;
+    int i;
+    vector<bool> b(nRow*nCol);
+    
+    for (size_t i = 0; i<nRow*nCol; i++)
+        b[i] = false;
+    b[0] = b[size] = 1;
+    i = 1;
+    while (i < size)
+    {
+        cycleBegin = i;
+        t = pMtrx[i];
+        do
+        {
+            next = (i*nRow)%size;
+            swap(pMtrx[next], t);
+            b[i] = 1;
+            i = next;
+        }
+        while (i != cycleBegin);
+        
+        for (i = 1; i < size && b[i]; i++);
+    }
+}
+
+
 
 
 
 int main() {
-    size_t n = 5, m = 3;
+    size_t n = 3, m = 5;
     size_t size = n*m;
     float *mas = new float[size];
     for (int i = 0; i<size; i++)
@@ -69,7 +100,7 @@ int main() {
         cout << mas[i] << " ";
     }
     cout << "]"<<endl;
-    TransformMtrxThirdAlg(mas, m, n);
+    TransformMtrxFourthdAlg(mas, m, n);
     cout << "[";
     for(int i = 0; i<n*m; i++){
         cout << mas[i] << " ";
