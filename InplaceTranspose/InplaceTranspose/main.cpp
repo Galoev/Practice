@@ -6,10 +6,10 @@
 
 using namespace std;
 
-//#define MY_DEF_USE_LIBTAP
+#define MY_DEF_USE_LIBTAP
 #ifdef MY_DEF_USE_LIBTAP
 #define TAP_COMPILE
-#include "libtap\cpp_tap.h"
+#include "/Users/ilkin_galoev/Downloads/tst_example (1)/tst_example/libtap/cpp_tap.h"
 int main(int, char *[]) {
     using namespace std;
     size_t n1 = 2, m1 = 4, n2 = 5, m2 = 3, n3 = 1, m3 = 2, n4 = 1, m4 = 1, n5 = 8, m5 = 1;
@@ -46,7 +46,7 @@ int main(int, char *[]) {
     for (int i = 0; i<size5; i++)
         falseMas5[i] = 0;
     
-    plan_tests(58);
+    plan_tests(66);
     
     TransformMtrxFirstAlg(mas1, n1, m1);
     TransformMtrxFirstAlg(mas2, n2, m2);
