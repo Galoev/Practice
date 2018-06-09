@@ -2,11 +2,13 @@
 #include <vector>
 #include <bitset>
 #include <stdio.h>
+#include <ctime>
 #include "Algorithms.h"
 
 using namespace std;
 
-#define MY_DEF_USE_LIBTAP
+//#define MY_DEF_USE_LIBTAP
+#define TIME_MEAS
 #ifdef MY_DEF_USE_LIBTAP
 #define TAP_COMPILE
 #include "/Users/ilkin_galoev/Downloads/tst_example (1)/tst_example/libtap/cpp_tap.h"
@@ -185,6 +187,51 @@ int main(int, char *[]) {
   return exit_status();
   
   return 0;
+}
+#elif defined(TIME_MEAS)
+int main() {
+  cout<<"TIME_MEAS"<<endl<<endl;
+  size_t n = 500, m = 50;
+  size_t size = n * m;
+  float *mas = new float[size];
+  for (int i = 0; i < size; i++)
+    mas[i] = i + 1;
+  cout<<"Filled"<<endl;
+  double sum[] ={0, 0, 0, 0};
+  int times = 10;
+  for (int i = 0; i < times; i++) {
+    unsigned int start_time =  clock();
+    TransformMtrxFirstAlg(mas, n, m);
+    unsigned int end_time = clock();
+    unsigned int search_time = end_time - start_time;
+    cout<<"Frist: "<<search_time<<endl;
+    sum[0] += search_time;
+    
+    start_time =  clock();
+    TransformMtrxSecondAlg(mas, n, m);
+    end_time = clock();
+    search_time = end_time - start_time;
+    cout<<"Second: "<<search_time<<endl;
+    sum[1] += search_time;
+    
+    start_time =  clock();
+    TransformMtrxThirdAlg(mas, n, m);
+    end_time = clock();
+    search_time = end_time - start_time;
+    cout<<"Third: "<<search_time<<endl;
+    sum[2] += search_time;
+    
+    start_time =  clock();
+    TransformMtrxFourthAlg(mas, n, m);
+    end_time = clock();
+    search_time = end_time - start_time;
+    cout<<"Fourth: "<<search_time<<endl
+    <<"---------------------"<<endl;
+    sum[3] += search_time;
+  }
+  for (int i = 0; i < 4; i++) {
+    cout<<i+1<<" "<<sum[i]/times<<endl;
+  }
 }
 #else
 int main() {
